@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         HIMARS
-// @version      4.0
+// @version      4.1
 // @description  Humiliating IMageboard ARmy  Script
-// @match        https://2ch.hk/*
-// @match        https://2ch.life/*
+// @match        *://2ch.hk/*
+// @match        *://2ch.life/*
 // ==/UserScript==
 
 const vatniks = [
