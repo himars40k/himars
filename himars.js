@@ -13,8 +13,8 @@ const vatniks = [
 	["/flags/NO.png"] //путает /ga/ и /po/
 ];
 const phrases = [
-    "Это не сперма, а столярный клей!!!",
-    "Нахуй путешествую",
+	"Это не сперма, а столярный клей!!!",
+	"Нахуй путешествую",
 	"Ко-ко-ко! Ку-ка-ре-ку!",
 	"Батько наш Бандера, Україна — мати!",
 	"Сегодня сварил чай из лапухов на родниковой воде с Макеевки, это был лучший чай в моей жизни!<br><span class=\"thanks-abu\" style=\"color: red;\">Абу благословил этот пост.</span>",
@@ -46,15 +46,15 @@ const user_ids = [ "Тупой Лахтобот", "Грязноштанный С
 var interval; //глобальный цикл
 
 function toggle_visibility(img) {
-    if (img == null) return;
-    const shitpost = img.parentElement.querySelector("article");
-    if (img.style.display) {
-        shitpost.style.paddingLeft = "";
-        img.style.display = "";
-    } else {
-        shitpost.style.paddingLeft = "16px";
-        img.style.display = 'none';
-    }
+	if (img == null) return;
+	const shitpost = img.parentElement.querySelector("article");
+	if (img.style.display) {
+		shitpost.style.paddingLeft = "";
+		img.style.display = "";
+	} else {
+		shitpost.style.paddingLeft = "16px";
+		img.style.display = 'none';
+	}
 }
 
 function fix_link(l) {
@@ -81,7 +81,7 @@ function add_details(el, html) {
 }
 
 function change_text(el) {
-    const e = el.querySelector("article");
+	const e = el.querySelector("article");
 	const shit_text = e.innerHTML;
 	const links = e.querySelectorAll(".post-reply-link");
 	const post_num = el.querySelector(".post__reflink").id;
@@ -103,7 +103,7 @@ function change_id(el) {
 function himars(el) {
 	if (el.classList.contains("himarsed")) return;
 	toggle_visibility(el.querySelector(".post__images"));
-    change_text(el);
+	change_text(el);
 	change_id(el);
 	el.classList.add("himarsed");
 }
@@ -119,7 +119,7 @@ async function auto_update(obj) {
 }
 
 function main() {
-    console.log("Орудие!");
+	console.log("Орудие!");
 	const gbc  = (cname,node=document) => (node.getElementsByClassName(cname)); //sugar, babe
 	const filt = post => vatniks.some( v => v.every( c => post.innerHTML.includes(c)));
 	const links = document.querySelectorAll(".post-reply-link");
@@ -128,7 +128,7 @@ function main() {
 }
 
 function first() {
-    const add_listener = (e,t=2500) => e.addEventListener('click', function() { clown_listener(t) },false);
+	const add_listener = (e,t=2500) => e.addEventListener('click', function() { clown_listener(t) },false);
 	main();
 	document.querySelectorAll(".autorefresh-checkbox").forEach( checkbox => {
 		checkbox.addEventListener('click', function() { auto_update(this) },false);
