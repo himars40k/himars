@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HIMARS
-// @version      4.1
+// @version      4.2
 // @description  Humiliating IMageboard ARmy  Script
 // @match        *://2ch.hk/*
 // @match        *://2ch.life/*
@@ -10,7 +10,7 @@ const vatniks = [
 	[ "logos/comm.png" , "/flags/A1.png" ], // Сева
 	[ "logos/comm.png" , "/flags/AT.png" ], // Сева
 	[ "/flags/.png"    , "logos/nya.png" ], //Пидор без флага с nyan-cat
-	["/flags/NO.png"] //путает /ga/ и /po/
+	[ "/flags/NO.png" ] //путает /ga/ и /po/
 ];
 const phrases = [
 	"Это не сперма, а столярный клей!!!",
@@ -74,9 +74,9 @@ function add_details(el, html) {
 	details.style.cursor = "pointer";
 	details.style.fontSize = "10px";
 	details.addEventListener('click',function() {
-        const imgs = this.parentNode.parentNode.querySelector(".post__images");
-	    toggle_visibility(imgs);
-    },false);
+		const imgs = this.parentNode.parentNode.querySelector(".post__images");
+		toggle_visibility(imgs);
+	},false);
 	el.appendChild(details);
 }
 
@@ -120,15 +120,15 @@ async function auto_update(obj) {
 
 function main() {
 	console.log("Орудие!");
-	const gbc  = (cname,node=document) => (node.getElementsByClassName(cname)); //sugar, babe
-	const filt = post => vatniks.some( v => v.every( c => post.innerHTML.includes(c)));
-	const links = document.querySelectorAll(".post-reply-link");
-	links.forEach(fix_link);
-	Array.from(gbc("post_type_reply")).filter(filt).forEach(himars);
+	document.querySelectorAll(".post-reply-link").forEach(fix_link);
+	[...document.querySelectorAll(".post_type_reply")]
+	.filter(post => vatniks.some( v => v.every( c => post.innerHTML.includes(c))))
+	.forEach(himars);
 }
 
 function first() {
-	const add_listener = (e,t=2500) => e.addEventListener('click', function() { clown_listener(t) },false);
+	const add_listener = (e,t=2600) => e.addEventListener(
+		'click', function() { clown_listener(t) },false);
 	main();
 	document.querySelectorAll(".autorefresh-checkbox").forEach( checkbox => {
 		checkbox.addEventListener('click', function() { auto_update(this) },false);
