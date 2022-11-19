@@ -49,9 +49,6 @@ var css_hack = `
 	cursor: pointer;
 	display: inline-block;
 	position : relative;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -62,7 +59,7 @@ var css_hack = `
 	color: #fff;
 	text-align: center;
 	border-radius: 6px;
-	padding: 8px 0;
+	padding: 8px;
 	position: absolute;
 	z-index: 1;
 	bottom: 125%;
@@ -83,13 +80,7 @@ var css_hack = `
 
 .popup .show {
 	visibility: visible;
-	-webkit-animation: fadeIn 1s;
 	animation: fadeIn 1s;
-}
-
-@-webkit-keyframes fadeIn {
-	from {opacity: 0;} 
-	to {opacity: 1;}
 }
 
 @keyframes fadeIn {
