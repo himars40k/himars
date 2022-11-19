@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HIMARS
-// @version      4.3
+// @version      4.4
 // @description  Humiliating IMageboard ARmy  Script
 // @match        *://2ch.hk/*
 // @match        *://2ch.life/*
