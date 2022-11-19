@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HIMARS
-// @version      4.2
+// @version      4.3
 // @description  Humiliating IMageboard ARmy  Script
 // @match        *://2ch.hk/*
 // @match        *://2ch.life/*
@@ -43,7 +43,67 @@ const phrases = [
 	"Вот объясните мне почему плохо ходить в грязных штанах? Я просто пытаюсь разобраться"
 ];
 const user_ids = [ "Тупой Лахтобот", "Грязноштанный Сёва", "Макеевский Родничок", "Копиумный Наркоман", "Меня Ебали", "Тюремный Газонюх", "Бесячий Цыган", "Лягушка Нахуй-Путешественница" ];
+const topics = [ "Херсон чей???", "За Русь порвусь! Не заштопаешь", "Коней на ПЕРЕПРАВЕ не меняют", "Ряяяя, мы только выиграли!", "Не нажимай сюда, я предупреждал!" ];
+var css_hack = ` 
+.popup {
+	cursor: pointer;
+	display: inline-block;
+	position : relative;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.popup .popup_text {
+	visibility: hidden;
+	width: 160px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 8px 0;
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -80px;
+}
+
+.popup .popup_text::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+.popup .show {
+	visibility: visible;
+	-webkit-animation: fadeIn 1s;
+	animation: fadeIn 1s;
+}
+
+@-webkit-keyframes fadeIn {
+	from {opacity: 0;} 
+	to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+	from {opacity: 0;}
+	to {opacity:1 ;}
+}
+` //Новенький CSS
 var interval; //глобальный цикл
+
+function hack_css(new_css) {
+	const stylesheet = document.createElement("style");
+	stylesheet.innerHTML = new_css;
+	document.head.appendChild(stylesheet);
+}
 
 function toggle_visibility(img) {
 	if (img == null) return;
@@ -53,7 +113,7 @@ function toggle_visibility(img) {
 		img.style.display = "";
 	} else {
 		shitpost.style.paddingLeft = "16px";
-		img.style.display = 'none';
+		img.style.display = "none";
 	}
 }
 
@@ -93,18 +153,39 @@ function change_text(el) {
 	});
 	add_details(e, shit_text);
 }
-
 function change_id(el) {
-	const e = el.querySelector(".post__anon,.post__email").querySelector("span");
-	const magic = e.innerHTML.length;
-	e.innerHTML = user_ids[ magic % user_ids.length].replaceAll(' ',"&nbsp;");
+	const x = el.querySelector(".post__ophui");
+	if (x) {
+		x.innerHTML = "#&nbsp;ОП-Хуй";
+	} else {
+		const e = el.querySelector(".post__anon,.post__email").querySelector("span");
+		const magic = e.innerHTML.length;
+		e.innerHTML = user_ids[ magic % user_ids.length].replaceAll(' ',"&nbsp;");
+	}
+}
+
+function change_topic(el) {
+	const topic = el.querySelector(".post__title");
+	if (! topic) return;
+	const pop = document.createElement("span");
+	const post_num = el.querySelector(".post__reflink").id;
+	pop.classList.add("popup_text");	
+	pop.innerHTML = topic.innerHTML;
+	topic.innerHTML = topics[ post_num % topics.length ];
+	topic.classList.add("popup");
+	topic.appendChild(pop)
+	topic.addEventListener('click',function() { 
+		const x = this.querySelector(".popup_text")
+		x.classList.toggle("show");
+	},false);	
 }
 
 function himars(el) {
 	if (el.classList.contains("himarsed")) return;
 	toggle_visibility(el.querySelector(".post__images"));
-	change_text(el);
+	change_topic(el);
 	change_id(el);
+	change_text(el);
 	el.classList.add("himarsed");
 }
 
@@ -121,8 +202,8 @@ async function auto_update(obj) {
 function main() {
 	console.log("Орудие!");
 	document.querySelectorAll(".post-reply-link").forEach(fix_link);
-	[...document.querySelectorAll(".post_type_reply")]
-	.filter(post => vatniks.some( v => v.every( c => post.innerHTML.includes(c))))
+	[...document.querySelectorAll(".post_type_reply,.post_type_oppost")]
+	.filter(post => vatniks.some(v => v.every(c => post.innerHTML.includes(c))))
 	.forEach(himars);
 }
 
@@ -130,6 +211,7 @@ function first() {
 	const add_listener = (e,t=2600) => e.addEventListener(
 		'click', function() { clown_listener(t) },false);
 	main();
+	hack_css(css_hack);
 	document.querySelectorAll(".autorefresh-checkbox").forEach( checkbox => {
 		checkbox.addEventListener('click', function() { auto_update(this) },false);
 		auto_update(checkbox); });
